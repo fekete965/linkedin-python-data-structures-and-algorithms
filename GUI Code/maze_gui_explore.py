@@ -95,9 +95,15 @@ class MazeGUI:
     def set_treasure_pos_from_click(self, x, y):
         # Don't allow this once path has started:
         if not self.path_started:
-            self.treasure_pos = helpers.grid_pos_from_screen_coords((x, y), self.maze_dimensions)
+            self.treasure_pos = helpers.grid_pos_from_screen_coords(
+                (x, y), self.maze_dimensions
+            )
             if self.treasure_pos not in self.maze_obstacles:
-                self.treasure.goto(helpers.screen_coords_from_grid_pos(self.treasure_pos, self.maze_dimensions))
+                self.treasure.goto(
+                    helpers.screen_coords_from_grid_pos(
+                        self.treasure_pos, self.maze_dimensions
+                    )
+                )
                 self.treasure.showturtle()
                 self.treasure_set = True
                 self.screen.update()
@@ -200,7 +206,9 @@ class MazeGUI:
 
     def draw_maze(self, obstacles):
         for obstacle in obstacles:
-            self.builder.goto(helpers.screen_coords_from_grid_pos(obstacle, self.maze_dimensions))
+            self.builder.goto(
+                helpers.screen_coords_from_grid_pos(obstacle, self.maze_dimensions)
+            )
             self.builder.stamp()
 
     def draw_piece(self, piece, pos, stamp=False):
@@ -218,14 +226,17 @@ class MazeGUI:
     def do_algorithm(self):
         if self.treasure_set:  # Can't find path to null position.
             if self.algorithm == "dfs":
-                self.opponent_path = search.dfs(self.maze_grid, self.opponent_start_pos,
-                                                self.treasure_pos)
+                self.opponent_path = search.dfs(
+                    self.maze_grid, self.opponent_start_pos, self.treasure_pos
+                )
             elif self.algorithm == "bfs":
-                self.opponent_path = search.bfs(self.maze_grid, self.opponent_start_pos,
-                                                self.treasure_pos)
+                self.opponent_path = search.bfs(
+                    self.maze_grid, self.opponent_start_pos, self.treasure_pos
+                )
             elif self.algorithm == "a_star":
-                self.opponent_path = search.a_star(self.maze_grid, self.opponent_start_pos,
-                                                   self.treasure_pos)
+                self.opponent_path = search.a_star(
+                    self.maze_grid, self.opponent_start_pos, self.treasure_pos
+                )
             # Path is found
             if self.opponent_path is not None:
                 self.path_started = True
@@ -261,7 +272,8 @@ class MazeGUI:
 
 
 if __name__ == "__main__":
-    maze_grid, maze_dimensions, maze_obstacles, player_start_pos, opponent_start_pos = helpers.read_maze_from_file(
-        config.MAZE_FILE)
+    maze_grid, maze_dimensions, maze_obstacles, player_start_pos, opponent_start_pos = (
+        helpers.read_maze_from_file(config.MAZE_FILE)
+    )
     MazeGUI(maze_grid, maze_dimensions, maze_obstacles, opponent_start_pos)
     turtle.done()

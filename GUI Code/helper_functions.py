@@ -3,6 +3,7 @@ Python Data Structures - A Game-Based Approach
 Robin Andrews - https://compucademy.net/
 Helper functions for use in GUI.
 """
+
 import config
 
 
@@ -12,7 +13,7 @@ def screen_coords_from_grid_pos(pos, grid_dimensions):
     """
     i, j = pos
     # 20 here is a turtle size of 18 plus 1 px border each side, so the size of one "cell".
-    screen_x = - ((grid_dimensions[1] - 1) / 2 * 20) + (j * 20)
+    screen_x = -((grid_dimensions[1] - 1) / 2 * 20) + (j * 20)
     screen_y = ((grid_dimensions[0] - 1) / 2 * 20) - (i * 20)
     return (screen_x, screen_y)
 
@@ -57,7 +58,13 @@ def read_maze_from_file(file_name):
                     elif maze[i][j] == config.OPPONENT:
                         opponent_start_pos = (i, j)
 
-            return maze, (num_rows, num_cols_top_row), maze_obstacles, player_start_pos, opponent_start_pos
+            return (
+                maze,
+                (num_rows, num_cols_top_row),
+                maze_obstacles,
+                player_start_pos,
+                opponent_start_pos,
+            )
     except UnboundLocalError:
         print("The maze needs a player and an opponent.")
         raise SystemExit

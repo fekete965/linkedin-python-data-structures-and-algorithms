@@ -19,7 +19,14 @@ import tkinter as tk
 
 
 class MazeGUI:
-    def __init__(self, maze_grid, maze_dimensions, maze_obstacles, player_start_pos, opponent_start_pos):
+    def __init__(
+        self,
+        maze_grid,
+        maze_dimensions,
+        maze_obstacles,
+        player_start_pos,
+        opponent_start_pos,
+    ):
         self.maze_grid = maze_grid
         self.maze_dimensions = maze_dimensions  # rows, columns.
         self.maze_obstacles = maze_obstacles
@@ -118,7 +125,9 @@ class MazeGUI:
 
         # Start message
         self.score_turtle.goto(0, 20)
-        self.score_turtle.write("Press S to start", align="center", font=config.SCORE_FONT)
+        self.score_turtle.write(
+            "Press S to start", align="center", font=config.SCORE_FONT
+        )
         self.score_turtle.goto(0, -350)
 
     def bind_direction_keys(self):
@@ -207,9 +216,13 @@ class MazeGUI:
     def update_score_display(self):
         self.score_turtle.clear()
         self.score_turtle.goto(0, -350)
-        self.score_turtle.write("Player score:{:2} Opponent Score:{:2}".format(self.player_score, self.opponent_score),
-                                align="center",
-                                font=config.GAME_OVER_FONT)
+        self.score_turtle.write(
+            "Player score:{:2} Opponent Score:{:2}".format(
+                self.player_score, self.opponent_score
+            ),
+            align="center",
+            font=config.GAME_OVER_FONT,
+        )
 
     def game_over(self):
         self.score_turtle.goto(0, 0)
@@ -239,7 +252,9 @@ class MazeGUI:
 
     def draw_maze(self, obstacles):
         for obstacle in obstacles:
-            self.builder.goto(helpers.screen_coords_from_grid_pos(obstacle, self.maze_dimensions))
+            self.builder.goto(
+                helpers.screen_coords_from_grid_pos(obstacle, self.maze_dimensions)
+            )
             self.builder.stamp()
 
     def draw_piece(self, piece, pos, stamp=False):
@@ -251,7 +266,11 @@ class MazeGUI:
         while True:
             i = random.randrange(self.maze_dimensions[0])
             j = random.randrange(self.maze_dimensions[1])
-            if not (i, j) in self.maze_obstacles and (i, j) != self.player_pos and (i, j) != self.opponent_pos:
+            if (
+                not (i, j) in self.maze_obstacles
+                and (i, j) != self.player_pos
+                and (i, j) != self.opponent_pos
+            ):
                 potential_pos = (i, j)
                 path = self.calculate_path(potential_pos)
                 if path is None:
@@ -293,8 +312,10 @@ class MazeGUI:
 
     def set_player_direction(self, direction):
         if self.playing:
-            new_pos = (self.player_pos[0] + config.offsets[direction][0],
-                       self.player_pos[1] + config.offsets[direction][1])  # Repeated in move_player.
+            new_pos = (
+                self.player_pos[0] + config.offsets[direction][0],
+                self.player_pos[1] + config.offsets[direction][1],
+            )  # Repeated in move_player.
             if new_pos not in self.maze_obstacles:
                 self.player_direction = direction
 
@@ -307,11 +328,16 @@ class MazeGUI:
     def move_player(self):
         # Calculate potential new position
         if self.player_direction != "stop":
-            new_pos = (self.player_pos[0] + config.offsets[self.player_direction][0],
-                       self.player_pos[1] + config.offsets[self.player_direction][1])
+            new_pos = (
+                self.player_pos[0] + config.offsets[self.player_direction][0],
+                self.player_pos[1] + config.offsets[self.player_direction][1],
+            )
 
             # if new pos is legal, move player
-            if 0 <= new_pos[0] < self.maze_dimensions[0] and 0 <= new_pos[1] < self.maze_dimensions[1]:
+            if (
+                0 <= new_pos[0] < self.maze_dimensions[0]
+                and 0 <= new_pos[1] < self.maze_dimensions[1]
+            ):
                 if new_pos not in self.maze_obstacles:
                     self.player_pos = new_pos
                     self.draw_piece(self.player, self.player_pos)
@@ -340,7 +366,10 @@ class MazeGUI:
 
 
 if __name__ == "__main__":
-    maze_grid, maze_dimensions, maze_obstacles, player_start_pos, opponent_start_pos = helpers.read_maze_from_file(
-        config.MAZE_FILE)
-    MazeGUI(maze_grid, maze_dimensions, maze_obstacles, player_start_pos, opponent_start_pos)
+    maze_grid, maze_dimensions, maze_obstacles, player_start_pos, opponent_start_pos = (
+        helpers.read_maze_from_file(config.MAZE_FILE)
+    )
+    MazeGUI(
+        maze_grid, maze_dimensions, maze_obstacles, player_start_pos, opponent_start_pos
+    )
     turtle.done()
