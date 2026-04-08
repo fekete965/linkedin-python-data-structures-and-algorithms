@@ -10,7 +10,26 @@ from stack import Stack
 
 
 def dfs(maze, start, goal):
-    pass
+    predecessors = {start: None}
+    stack = Stack()
+
+    stack.push(start)
+
+    while not stack.is_empty():
+        current = stack.pop()
+
+        if current == goal:
+            return get_path(predecessors, start, goal)
+
+        for direction in ["up", "right", "down", "left"]:
+            offset_x, offset_y = offsets[direction]
+            neighbour = (current[0] + offset_x, current[1] + offset_y)
+
+            if is_legal_pos(maze, neighbour) and neighbour not in predecessors:
+                predecessors[neighbour] = current
+                stack.push(neighbour)
+
+    return None
 
 
 if __name__ == "__main__":
