@@ -20,7 +20,32 @@ def heuristic(a, b):
 
 
 def a_star(maze, start, goal):
-    pass
+    predecessors = {start: None}
+    g_values = {start: 0}
+    pq = PriorityQueue()
+
+    pq.put(start, 1)
+
+    while not pq.is_empty():
+        current_cell = pq.get()
+
+        if current_cell == goal:
+            return get_path(predecessors, start, goal)
+
+        for direction in ["up", "right", "down", "left"]:
+            row_offset, column_offset = offsets[direction]
+            neighbour = (current_cell[0] + row_offset, current_cell[1] + column_offset)
+
+            if is_legal_pos(maze, neighbour) and neighbour not in g_values:
+                predecessors[neighbour] = current_cell
+
+                g_value = g_values[current_cell] + 1
+                g_values[neighbour] = g_value
+
+                f_value = g_value + heuristic(neighbour, goal)
+                pq.put(neighbour, f_value)
+
+    return None
 
 
 if __name__ == "__main__":
@@ -33,8 +58,8 @@ if __name__ == "__main__":
 
     # Test 2
     maze = read_maze("mazes/mini_maze_bfs.txt")
-    # for row in maze:
-    #     print(row)
+    for row in maze:
+        print(row)
     start_pos = (0, 0)
     goal_pos = (2, 2)
     result = a_star(maze, start_pos, goal_pos)
